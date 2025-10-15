@@ -155,12 +155,22 @@
     </div>
 
     <script>
-        const cartButton = document.getElementById('cart-button');
-        const cartPanel = document.getElementById('cart-panel');
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartButton = document.getElementById('cart-button');
+            const cartPanel = document.getElementById('cart-panel');
 
-        cartButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            cartPanel.classList.toggle('open');
+            // Toggle cart panel when button clicked
+            cartButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                cartPanel.classList.toggle('open');
+            });
+
+            // Close cart panel when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!cartPanel.contains(e.target) && !cartButton.contains(e.target)) {
+                    cartPanel.classList.remove('open');
+                }
+            });
         });
     </script>
 </body>
