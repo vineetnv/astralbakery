@@ -12,8 +12,8 @@ def home():
 def menu():
     return render_template('menu.html')
 
-@app.route('/order')
-def menu():
+@app.route('/order', methods=['GET', 'POST'])
+def order():
     return render_template('order.html')
 
 @app.route('/orders')
