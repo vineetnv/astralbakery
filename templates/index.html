@@ -62,7 +62,7 @@
         /* 🧁 Current Selections styling */
         .section-title {
             text-align: center;
-            font-size: 2rem; /* reduced size */
+            font-size: 2rem; /* slightly reduced */
             font-weight: bold;
             margin-top: 2rem;
             text-decoration: underline;
@@ -72,7 +72,7 @@
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem; /* reduced gap */
+            gap: 1.5rem; /* keep symmetry */
             margin-top: 2rem;
             justify-items: center;
         }
@@ -82,8 +82,8 @@
         }
 
         .grid-item img {
-            width: 230px;  /* increased size */
-            height: 230px;
+            width: 250px;  /* increased size */
+            height: 250px;
             object-fit: cover;
             border-radius: 10px;
         }
@@ -91,6 +91,17 @@
         .grid-item p {
             margin-top: 0.5rem;
             font-weight: bold;
+            font-size: 1.1rem; /* increased text size */
+        }
+
+        /* 📨 Bottom banner */
+        .bottom-banner {
+            background-color: #f8b400;
+            color: #3e2723;
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 1rem;
+            margin-top: 3rem;
         }
 
         .cart-icon {
@@ -154,5 +165,9 @@
         </div>
     </div>
 
+    <!-- 📨 Bottom banner with contact info -->
+    <div class="bottom-banner">
+        Email: TheAstralBakery@gmail.com | Phone: 256 783 0672
+    </div>
 </body>
 </html>
