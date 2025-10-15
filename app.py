@@ -12,6 +12,10 @@ def home():
 def menu():
     return render_template('menu.html')
 
+@app.route('/order')
+def menu():
+    return render_template('order.html')
+
 @app.route('/orders')
 def view_orders():
     if not session.get('logged_in'):
