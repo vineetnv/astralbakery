@@ -5,22 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders - Bakery Owner</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #fff8f0; color: #3e2723; padding: 2rem; text-align: center; }
-        table { width: 90%; margin: auto; border-collapse: collapse; }
-        th, td { padding: 0.75rem; border: 1px solid #ccc; }
-        th { background-color: #f8b400; color: white; }
-        button { background-color: #ff7043; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        button:hover { background-color: #e64a19; }
-        .logout { margin-bottom: 1rem; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #fff8f0; 
+            color: #3e2723; 
+            padding: 2rem; 
+            text-align: center; 
+        }
+        table { 
+            width: 90%; 
+            margin: auto; 
+            border-collapse: collapse; 
+        }
+        th, td { 
+            padding: 0.75rem; 
+            border: 1px solid #ccc; 
+        }
+        th { 
+            background-color: #f8b400; 
+            color: white; 
+        }
+        button { 
+            background-color: #ff7043; 
+            color: white; 
+            border: none; 
+            padding: 5px 10px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+        button:hover { 
+            background-color: #e64a19; 
+        }
+        .logout { 
+            margin-bottom: 1rem; 
+        }
     </style>
 </head>
 <body>
     <h1>Bakery Orders</h1>
 
+    <!-- Logout button -->
     <div class="logout">
         <a href="{{ url_for('logout_page') }}"><button>Logout</button></a>
     </div>
 
+    <!-- Orders table -->
     <table>
         <tr>
             <th>Name</th>
@@ -29,14 +58,16 @@
             <th>Pickup Time</th>
             <th>Action</th>
         </tr>
-        {% for i, order in enumerate(orders) %}
+
+        {% for order in orders %}
         <tr>
             <td>{{ order[0] }}</td>
             <td>{{ order[1] }}</td>
             <td>{{ order[2] }}</td>
             <td>{{ order[3] }}</td>
             <td>
-                <form method="POST" action="{{ url_for('fulfill_order', order_index=i) }}" 
+                <!-- Fulfill Order Button -->
+                <form method="POST" action="{{ url_for('fulfill_order', order_index=loop.index0) }}"
                       onsubmit="return confirm('Are you sure this order is fulfilled? This will remove the order from the database.');">
                     <button type="submit">Order Fulfilled</button>
                 </form>

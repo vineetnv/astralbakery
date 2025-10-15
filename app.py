@@ -87,7 +87,8 @@ def orders_page():
     except FileNotFoundError:
         orders = []
 
-    return render_template('orders.html', orders=orders)
+    orders_with_index = list(enumerate(orders))
+    return render_template('orders.html', orders=orders_with_index)
 
 # ------------------------
 # Fulfill Order (Remove from CSV)
