@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Astral Bakery{% endblock %}</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff8f0;
+            color: #3e2723;
+            text-align: start;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #f8b400;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .button {
+            background-color: #ff7043;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .button:hover {
+            background-color: #e64a19;
+        }
+
+        /* Banner */
+        .banner {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Section title */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 2rem;
+            text-decoration: underline;
+        }
+
+        /* Grid for current selections */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+            justify-items: center;
+        }
+
+        .grid-item {
+            text-align: center;
+        }
+
+        .grid-item img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .grid-item p {
+            margin-top: 0.5rem;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Bottom banner */
+        .bottom-banner {
+            background-color: #f8b400;
+            color: #3e2723;
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 1.3rem;
+            margin-top: 3rem;
+        }
+
+        /* Slide-in cart panel */
+        .cart-panel {
+            position: fixed;
+            top: 0;
+            right: -300px; /* hidden by default */
+            width: 300px;
+            height: 100%;
+            background-color: #fff8f0;
+            border-left: 2px solid #f8b400;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            transition: right 0.3s ease;
+            padding: 1rem;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .cart-panel.open {
+            right: 0;
+        }
+
+        .cart-panel h3 {
+            margin-top: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Astral Bakery 🍪</h1>
+        <nav>
+            <a href="/menu" class="button">View Menu</a>
+            <a href="/order" class="button">Place Order</a>
+            <a href="/about" class="button">About</a>
+            <a href="#" id="cart-button" class="button"><span class="cart-icon">🛒</span> Cart</a>
+        </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <!-- Bottom banner -->
+    <div class="bottom-banner">
+        Email: TheAstralBakery@gmail.com | Phone: 256-783-0672
+    </div>
+
+    <!-- Slide-in cart panel -->
+    <div id="cart-panel" class="cart-panel">
+        <h3>Your Cart</h3>
+        <p>No items yet.</p>
+    </div>
+
+    <script>
+        const cartButton = document.getElementById('cart-button');
+        const cartPanel = document.getElementById('cart-panel');
+
+        cartButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            cartPanel.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
