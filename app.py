@@ -59,5 +59,9 @@ def logout():
     session.pop('logged_in', None)  # removes the login info from the session
     return redirect(url_for('home'))  # send user back to homepage
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
