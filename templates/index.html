@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Astral Bakery</title>
 
-    <!-- Basic styling (you can replace this later with a CSS file) -->
     <style>
-        body 
-        {
+        body {
             font-family: 'Arial', sans-serif;
             background-color: #fff8f0;
             color: #3e2723;
@@ -17,10 +15,12 @@
             padding: 0;
         }
 
-        header 
-        {
+        header {
             background-color: #f8b400;
-            padding: 1rem 0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         h1 {
@@ -28,36 +28,53 @@
             font-size: 2rem;
         }
 
-        .content {
-            margin-top: 2rem;
+        nav {
+            display: flex;
+            gap: 1rem;
         }
 
         .button {
             background-color: #ff7043;
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 5px;
             cursor: pointer;
             font-size: 1rem;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
         .button:hover {
             background-color: #e64a19;
+        }
+
+        .content {
+            margin-top: 2rem;
+            padding: 0 2rem;
+        }
+
+        .cart-icon {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Astral Bakery 🍪</h1>
+        <nav>
+            <a href="/menu" class="button">View Menu</a>
+            <a href="/order" class="button">Place Order</a>
+            <a href="/about" class="button">About</a>
+            <a href="/cart" class="button"><span class="cart-icon">🛒</span> Cart</a>
+        </nav>
     </header>
 
     <div class="content">
         <h2>Welcome to Astral Bakery!</h2>
         <p>Fresh cookies baked daily with love. Check out our menu or place an order online.</p>
-        <a href="/menu" class="button">View Menu</a>
-        <a href="/order" class="button">Place an Order</a>
     </div>
 </body>
 </html>
