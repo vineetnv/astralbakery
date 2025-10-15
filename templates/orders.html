@@ -33,5 +33,8 @@
     {% else %}
         <p>No orders yet.</p>
     {% endif %}
+    <a href="{{ url_for('logout') }}">
+        <button>Logout</button>
+    </a>
 </body>
 </html>

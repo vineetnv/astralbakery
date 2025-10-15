@@ -56,8 +56,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('logged_in', None)
-    return redirect(url_for('home'))
+    session.pop('logged_in', None)  # removes the login info from the session
+    return redirect(url_for('home'))  # send user back to homepage
 
 if __name__ == '__main__':
     app.run(debug=True)
