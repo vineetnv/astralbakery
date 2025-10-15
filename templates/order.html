@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Your Order</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff8f0;
+            color: #3e2723;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #f8b400;
+            padding: 1rem 0;
+        }
+
+        form {
+            background-color: #ffe0b2;
+            width: 60%;
+            margin: 2rem auto;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 1.5rem;
+            background-color: #ff7043;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #e64a19;
+        }
+
+        a {
+            display: block;
+            margin-top: 1rem;
+            color: #ff7043;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🍪 Place Your Order</h1>
+    </header>
+
+    <form action="#" method="POST">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+        <label for="cookie">Cookie Type</label>
+        <select id="cookie" name="cookie" required>
+            <option value="">--Select a Cookie--</option>
+            <option value="choc_chip">Chocolate Chip</option>
+            <option value="oatmeal_raisin">Oatmeal Raisin</option>
+            <option value="peanut_butter">Peanut Butter</option>
+        </select>
+
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
+
+        <label for="pickup_time">Pickup Time</label>
+        <input type="time" id="pickup_time" name="pickup_time" required>
+
+        <button type="submit">Submit Order</button>
+    </form>
+
+    <a href="/">← Back to Home</a>
+</body>
+</html>

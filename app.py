@@ -10,5 +10,9 @@ def home():
 def menu():
     return render_template('menu.html')
 
+@app.route('/order')
+def order():
+    return render_template('order.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
