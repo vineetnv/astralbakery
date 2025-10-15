@@ -2,7 +2,7 @@ import csv
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey123"  # Change to a secure random string
+app.secret_key = "supersecretkey123"  # Change this to a secure random string
 
 # ------------------------
 # Homepage
@@ -54,7 +54,7 @@ def login_page():
         username = request.form['username']
         password = request.form['password']
 
-        # Set bakery owner's credentials
+        # Replace with your friend's credentials
         if username == 'bakeryowner' and password == 'cookie123':
             session['logged_in'] = True
             return redirect(url_for('orders_page'))
@@ -87,8 +87,7 @@ def orders_page():
     except FileNotFoundError:
         orders = []
 
-    orders_with_index = list(enumerate(orders))
-    return render_template('orders.html', orders=orders_with_index)
+    return render_template('orders.html', orders=orders)
 
 # ------------------------
 # Fulfill Order (Remove from CSV)
@@ -106,6 +105,7 @@ def fulfill_order(order_index):
     except FileNotFoundError:
         orders = []
 
+    # Remove the order at the given index
     if 0 <= order_index < len(orders):
         orders.pop(order_index)
         with open('orders.csv', 'w', newline='') as file:
