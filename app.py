@@ -2,7 +2,7 @@ import csv
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey123"  # Change to a random string for security
+app.secret_key = "supersecretkey123"  # Change to a secure random string
 
 # ------------------------
 # Homepage
@@ -54,7 +54,7 @@ def login_page():
         username = request.form['username']
         password = request.form['password']
 
-        # Set your friend's credentials
+        # Set bakery owner's credentials
         if username == 'bakeryowner' and password == 'cookie123':
             session['logged_in'] = True
             return redirect(url_for('orders_page'))
@@ -67,7 +67,7 @@ def login_page():
 # Logout
 # ------------------------
 @app.route('/logout')
-def logout():
+def logout_page():
     session.pop('logged_in', None)
     return redirect(url_for('home'))
 
@@ -88,6 +88,30 @@ def orders_page():
         orders = []
 
     return render_template('orders.html', orders=orders)
+
+# ------------------------
+# Fulfill Order (Remove from CSV)
+# ------------------------
+@app.route('/fulfill/<int:order_index>', methods=['POST'])
+def fulfill_order(order_index):
+    if not session.get('logged_in'):
+        return redirect(url_for('login_page'))
+
+    orders = []
+    try:
+        with open('orders.csv', newline='') as file:
+            reader = csv.reader(file)
+            orders = list(reader)
+    except FileNotFoundError:
+        orders = []
+
+    if 0 <= order_index < len(orders):
+        orders.pop(order_index)
+        with open('orders.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(orders)
+
+    return redirect(url_for('orders_page'))
 
 # ------------------------
 # Run Flask App
