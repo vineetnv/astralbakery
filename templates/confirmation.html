@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff8f0;
+            color: #3e2723;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #f8b400;
+            padding: 1rem 0;
+        }
+
+        .content {
+            margin-top: 2rem;
+        }
+
+        a {
+            color: #ff7043;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🍪 Thank You for Your Order!</h1>
+    </header>
+
+    <div class="content">
+        <h2>Order Summary</h2>
+        <p><strong>Name:</strong> {{ name }}</p>
+        <p><strong>Cookie Type:</strong> {{ cookie }}</p>
+        <p><strong>Quantity:</strong> {{ quantity }}</p>
+        <p><strong>Pickup Time:</strong> {{ pickup_time }}</p>
+
+        <a href="/">← Back to Home</a>
+    </div>
+</body>
+</html>
