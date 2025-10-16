@@ -1,5 +1,5 @@
 import csv
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey123"  # Change this to a secure random string
@@ -57,11 +57,26 @@ def login_page():
         # Replace with your friend's credentials
         if username == 'bakeryowner' and password == 'cookie123':
             session['logged_in'] = True
-            return redirect(url_for('orders_page'))
+            return redirect(url_for('dashboard'))
         else:
             return "Incorrect username or password. Try again."
 
     return render_template('login.html')
+
+# ------------------------
+# Dashboard (Bakery Owner Homepage)
+# ------------------------
+@app.route('/dashboard')
+def dashboard():
+    if not session.get('logged_in'):
+        return redirect(url_for('login_page'))
+    return render_template('dashboard.html')
+
+@app.route('/manage-cookies')
+def manage_cookies():
+    if not session.get('logged_in'):
+        return redirect(url_for('login_page'))
+    return render_template('manage.html')
 
 # ------------------------
 # Logout
@@ -69,6 +84,7 @@ def login_page():
 @app.route('/logout')
 def logout_page():
     session.pop('logged_in', None)
+    flash("Successfully logged out")
     return redirect(url_for('home'))
 
 # ------------------------

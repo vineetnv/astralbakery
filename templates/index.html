@@ -3,6 +3,18 @@
 {% block title %}Home - Astral Bakery{% endblock %}
 
 {% block content %}
+
+    <!-- 🔔 Flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <!-- 🖼️ Banner image -->
     <img src="{{ url_for('static', filename='images/itworked.jpg') }}" alt="Astral Bakery Banner" class="banner">
 

@@ -39,15 +39,22 @@
         .logout { 
             margin-bottom: 1rem; 
         }
+        .dashboard-button {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+        .dashboard-button:hover {
+            background-color: #388E3C;
+        }
     </style>
 </head>
 <body>
     <h1>Bakery Orders</h1>
-
-    <!-- Logout button -->
-    <div class="logout">
-        <a href="{{ url_for('logout_page') }}"><button>Logout</button></a>
-    </div>
 
     <!-- Orders table -->
     <table>
@@ -75,5 +82,8 @@
         </tr>
         {% endfor %}
     </table>
+
+    <!-- Back to Dashboard button -->
+    <a href="{{ url_for('dashboard') }}" class="dashboard-button">Back to Dashboard</a>
 </body>
 </html>
