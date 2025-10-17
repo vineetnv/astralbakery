@@ -7,7 +7,7 @@
 
     <style>
         html, body {
-            height: 100%; /* full viewport height */
+            height: 100%;
             margin: 0;
             padding: 0;
         }
@@ -15,32 +15,36 @@
         body {
             display: flex;
             flex-direction: column;
-            font-family: 'Arial', sans-serif;
-            background-color: #fff8f0;
-            color: #3e2723;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fdf0f5; /* soft pink-lavender */
+            color: #a59ecb;
             text-align: start;
             min-height: 100vh;
         }
 
         main {
-            flex: 1; /* expands to fill vertical space */
+            flex: 1;
         }
 
         header {
-            background-color: #f8b400;
+            background-color: #e4d9f8; /* lighter pastel purple */
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         h1 {
             margin: 0;
-            font-size: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
         }
 
         h1 a {
-            color: inherit;
+            color: #ffffff;
             text-decoration: none;
         }
 
@@ -50,24 +54,25 @@
         }
 
         .button {
-            background-color: #ff7043;
-            color: white;
+            background: linear-gradient(135deg, #a8d2fc, #6fb3ff); /* gradient blue */
+            color: #ffffff;
+            font-weight: 700;
             border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 5px;
+            padding: 0.9rem 1.6rem; /* slightly bigger */
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.2rem; /* slightly bigger text */
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            transition: background 0.3s ease;
         }
 
         .button:hover {
-            background-color: #e64a19;
+            background: linear-gradient(135deg, #8fc7ff, #4fa3ff);
         }
 
-        /* Banner */
         .banner {
             width: 100%;
             height: 250px;
@@ -82,6 +87,7 @@
             font-weight: bold;
             margin-top: 2rem;
             text-decoration: underline;
+            color: #f0a7c0; /* slightly darker pastel pink */
         }
 
         /* Grid for current selections */
@@ -94,7 +100,18 @@
         }
 
         .grid-item {
+            position: relative;
             text-align: center;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: linear-gradient(135deg, #d5c2f0, #ffe0f0); /* fully opaque pastel purple/pink */
+        }
+
+        .grid-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
         }
 
         .grid-item img {
@@ -102,22 +119,24 @@
             height: 250px;
             object-fit: cover;
             border-radius: 10px;
+            background-color: transparent; /* transparent image background */
         }
 
         .grid-item p {
             margin-top: 0.5rem;
             font-weight: bold;
             font-size: 1.1rem;
+            color: #5a4d6c;
         }
 
         /* Bottom banner */
         .bottom-banner {
-            background-color: #f8b400;
-            color: #3e2723;
+            background-color: #e8ddff; /* lighter pastel purple */
+            color: #ffffff;
             text-align: center;
             padding: 1rem 0;
-            font-size: 1.3rem;
-            margin-top: 0; /* let flex layout handle spacing */
+            font-size: 1.1rem;
+            margin-top: 3rem; /* moved down from grid */
         }
 
         /* Slide-in cart panel */
@@ -127,9 +146,9 @@
             right: -100%;
             width: 300px;
             height: 100%;
-            background-color: #fff8f0;
-            border-left: 2px solid #f8b400;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+            background-color: #fdf0f5;
+            border-left: 2px solid #e4d9f8;
+            box-shadow: -2px 0 6px rgba(0,0,0,0.2);
             transition: right 0.3s ease;
             padding: 1rem;
             overflow-y: auto;
@@ -142,6 +161,7 @@
 
         .cart-panel h3 {
             margin-top: 0;
+            color: #9083a1;
         }
 
     </style>
@@ -161,12 +181,10 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Bottom banner -->
     <div class="bottom-banner">
         Email: TheAstralBakery@gmail.com | Phone: 256-783-0672
     </div>
 
-    <!-- Slide-in cart panel -->
     <div id="cart-panel" class="cart-panel">
         <h3>Your Cart</h3>
         <p>No items yet.</p>
@@ -177,13 +195,11 @@
             const cartButton = document.getElementById('cart-button');
             const cartPanel = document.getElementById('cart-panel');
 
-            // Toggle cart panel when button clicked
             cartButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 cartPanel.classList.toggle('open');
             });
 
-            // Close cart panel when clicking outside
             document.addEventListener('click', (e) => {
                 if (!cartPanel.contains(e.target) && !cartButton.contains(e.target)) {
                     cartPanel.classList.remove('open');
