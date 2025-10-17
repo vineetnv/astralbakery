@@ -1,0 +1,63 @@
+<!--
+<h2>Add a New Cookie</h2>
+
+<form action="{{ url_for('add_cookie') }}" method="post" enctype="multipart/form-data" style="max-width: 400px; margin: 0 auto;">
+    <div style="margin-bottom: 15px;">
+        <label for="name">Cookie Name:</label><br>
+        <input type="text" id="name" name="name" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="price">Price ($):</label><br>
+        <input type="number" id="price" name="price" step="0.01" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="image">Image Upload:</label><br>
+        <input type="file" id="image" name="image" accept="image/*" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <input type="submit" value="Add Cookie" style="padding: 10px 20px; background-color: #ffb347; border: none; border-radius: 8px; cursor: pointer;">
+    </div>
+</form>
+
+<div style="text-align: center; margin-top: 20px;">
+    <a href="{{ url_for('manage_cookies') }}" style="color: #555;">← Back to Manage Cookies</a>
+</div>
+-->
+
+{% extends "base.html" %}
+{% block title %}Add Cookie{% endblock %}
+
+{% block content %}
+<h1>Add a New Cookie</h1>
+
+<form action="{{ url_for('add_cookie') }}" method="post" enctype="multipart/form-data" class="cookie-form">
+    <label for="name">Cookie Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="price">Price ($):</label>
+    <input type="number" step="0.01" id="price" name="price" required>
+
+    <label for="image">Image Upload:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+
+    <input type="submit" value="Add Cookie">
+</form>
+
+<div style="text-align:center; margin-top:20px;">
+    <a href="{{ url_for('manage_cookies') }}" class="btn-back">← Back to Manage Cookies</a>
+</div>
+
+<style>
+    .cookie-form { max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .cookie-form input[type="text"],
+    .cookie-form input[type="number"],
+    .cookie-form input[type="file"] { padding: 8px; border-radius:5px; border:1px solid #ccc; }
+    .cookie-form input[type="submit"] { padding:10px; background-color:#ffb347; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
+    .cookie-form input[type="submit"]:hover { background-color:#ffa500; }
+    .btn-back { padding: 8px 16px; background-color: #3e2723; color: white; border-radius: 5px; text-decoration: none; }
+    .btn-back:hover { background-color: #5d4037; }
+</style>
+{% endblock %}

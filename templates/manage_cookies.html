@@ -1,0 +1,146 @@
+<!--<h2>Currently Listed</h2>
+<table border="1">
+  <tr><th>Name</th><th>Image</th><th>Price</th><th>Actions</th></tr>
+  {% for c in listed %}
+  <tr>
+    <td>{{ c.name }}</td>
+    <td><img src="{{ url_for('static', filename=c.image.split('images/')[1]) }}" width="80"></td>
+    <td>${{ '%.2f'|format(c.price) }}</td>
+    <td>
+      <form action="{{ url_for('update_cookie', id=c.id) }}" method="post" enctype="multipart/form-data" style="display:inline;">
+        <input type="text" name="name" value="{{ c.name }}">
+        <input type="number" step="0.01" name="price" value="{{ c.price }}">
+        <input type="file" name="image" accept="image/*">
+        <button type="submit">Update</button>
+      </form>
+      <a href="{{ url_for('swap_cookie', id=c.id) }}">Swap</a>
+      <a href="{{ url_for('remove_cookie', id=c.id) }}">Remove</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Not Currently Listed</h2>
+<table border="1">
+  <tr><th>Name</th><th>Image</th><th>Price</th><th>Actions</th></tr>
+  {% for c in not_listed %}
+  <tr>
+    <td>{{ c.name }}</td>
+    <td><img src="{{ url_for('static', filename=c.image.split('images/')[1]) }}" width="80"></td>
+    <td>${{ '%.2f'|format(c.price) }}</td>
+    <td>
+      <form action="{{ url_for('update_cookie', id=c.id) }}" method="post" enctype="multipart/form-data" style="display:inline;">
+        <input type="text" name="name" value="{{ c.name }}">
+        <input type="number" step="0.01" name="price" value="{{ c.price }}">
+        <input type="file" name="image" accept="image/*">
+        <button type="submit">Update</button>
+      </form>
+      <a href="{{ url_for('swap_cookie', id=c.id) }}">Swap</a>
+      <a href="{{ url_for('remove_cookie', id=c.id) }}">Remove</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div style="margin-top: 30px;">
+  <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+  <a href="{{ url_for('add_cookie') }}">➕ Add Cookie</a>
+</div>-->
+
+{% extends "base.html" %}
+{% block title %}Manage Cookies{% endblock %}
+{% block content %}
+<h1>Cookie Management</h1>
+
+<!-- Listed Cookies -->
+<h2 style="text-align: center;">Currently Listed Cookies</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in listed %}
+        <tr>
+            <td>{{ c.name }}</td>
+            <td><img src="{{ url_for('static', filename=c.image.split('images/')[1]) }}" width="80"></td>
+            <td>${{ '%.2f'|format(c.price) }}</td>
+            <td>
+                <!-- Update Form -->
+                <form action="{{ url_for('update_cookie', id=c.id) }}" method="post" enctype="multipart/form-data" style="display:inline-block; margin-right:5px;">
+                    <input type="text" name="name" value="{{ c.name }}" placeholder="Name" style="width: 100px; padding:3px;">
+                    <input type="number" step="0.01" name="price" value="{{ c.price }}" placeholder="Price" style="width: 60px; padding:3px;">
+                    <input type="file" name="image" accept="image/*" style="padding:3px;">
+                    <button type="submit" class="btn-update">Update</button>
+                </form>
+                <a href="{{ url_for('swap_cookie', id=c.id) }}" class="btn-swap">Swap</a>
+                <a href="{{ url_for('remove_cookie', id=c.id) }}" class="btn-remove" onclick="return confirm('Are you sure you want to remove this cookie?');">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Not Listed Cookies -->
+<h2 style="text-align: center;">Not Currently Listed Cookies</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in not_listed %}
+        <tr>
+            <td>{{ c.name }}</td>
+            <td><img src="{{ url_for('static', filename=c.image.split('images/')[1]) }}" width="80"></td>
+            <td>${{ '%.2f'|format(c.price) }}</td>
+            <td>
+                <!-- Update Form -->
+                <form action="{{ url_for('update_cookie', id=c.id) }}" method="post" enctype="multipart/form-data" style="display:inline-block; margin-right:5px;">
+                    <input type="text" name="name" value="{{ c.name }}" placeholder="Name" style="width: 100px; padding:3px;">
+                    <input type="number" step="0.01" name="price" value="{{ c.price }}" placeholder="Price" style="width: 60px; padding:3px;">
+                    <input type="file" name="image" accept="image/*" style="padding:3px;">
+                    <button type="submit" class="btn-update">Update</button>
+                </form>
+                <a href="{{ url_for('swap_cookie', id=c.id) }}" class="btn-swap">Swap</a>
+                <a href="{{ url_for('remove_cookie', id=c.id) }}" class="btn-remove" onclick="return confirm('Are you sure you want to remove this cookie?');">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Footer Buttons -->
+<div style="margin-top: 30px; text-align: center;">
+    <a href="{{ url_for('dashboard') }}" class="btn-back">← Back to Dashboard</a>
+    <a href="{{ url_for('add_cookie') }}" class="btn-add">➕ Add Cookie</a>
+</div>
+
+<!-- Styles -->
+<style>
+    table { width: 90%; margin: 20px auto; border-collapse: collapse; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
+    th { background-color: #f8b400; color: white; }
+    img { border-radius: 5px; }
+
+    .btn-update { padding: 5px 10px; background-color: #ffb347; border: none; border-radius:5px; cursor:pointer; margin-top:3px; }
+    .btn-update:hover { background-color: #ffa500; }
+
+    .btn-swap { padding: 5px 10px; background-color: #4caf50; color:white; border-radius:5px; text-decoration:none; margin-right:5px; }
+    .btn-swap:hover { background-color: #45a049; }
+
+    .btn-remove { padding: 5px 10px; background-color: #f44336; color:white; border-radius:5px; text-decoration:none; }
+    .btn-remove:hover { background-color: #d32f2f; }
+
+    .btn-back, .btn-add { padding: 8px 16px; background-color: #3e2723; color: white; border-radius: 5px; text-decoration: none; margin: 5px; display: inline-block; }
+    .btn-back:hover, .btn-add:hover { background-color: #5d4037; }
+</style>
+{% endblock %}
