@@ -16,7 +16,7 @@
             display: flex;
             flex-direction: column;
             font-family: 'Poppins', sans-serif;
-            background-color: #fdf0f5; /* soft pink-lavender */
+            background-color: #fdf0f5;
             color: #a59ecb;
             text-align: start;
             min-height: 100vh;
@@ -27,7 +27,7 @@
         }
 
         header {
-            background-color: #e4d9f8; /* lighter pastel purple */
+            background-color: #e4d9f8;
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
@@ -54,14 +54,14 @@
         }
 
         .button {
-            background: linear-gradient(135deg, #a8d2fc, #6fb3ff); /* gradient blue */
+            background: linear-gradient(135deg, #a8d2fc, #6fb3ff);
             color: #ffffff;
             font-weight: 700;
             border: none;
-            padding: 0.9rem 1.6rem; /* slightly bigger */
+            padding: 0.9rem 1.6rem;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.2rem; /* slightly bigger text */
+            font-size: 1.2rem;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -80,17 +80,15 @@
             display: block;
         }
 
-        /* Section title */
         .section-title {
             text-align: center;
             font-size: 2rem;
             font-weight: bold;
             margin-top: 2rem;
             text-decoration: underline;
-            color: #f0a7c0; /* slightly darker pastel pink */
+            color: #f0a7c0;
         }
 
-        /* Grid for current selections */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -106,7 +104,7 @@
             padding: 1rem;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            background: linear-gradient(135deg, #d5c2f0, #ffe0f0); /* fully opaque pastel purple/pink */
+            background: linear-gradient(135deg, #d5c2f0, #ffe0f0);
         }
 
         .grid-item:hover {
@@ -119,7 +117,7 @@
             height: 250px;
             object-fit: cover;
             border-radius: 10px;
-            background-color: transparent; /* transparent image background */
+            background-color: transparent;
         }
 
         .grid-item p {
@@ -129,17 +127,30 @@
             color: #5a4d6c;
         }
 
-        /* Bottom banner */
+        .grid-item button {
+            margin-top: 8px;
+            padding: 0.5rem 1rem;
+            background-color: #a8d2fc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .grid-item button:hover {
+            background-color: #6fb3ff;
+        }
+
         .bottom-banner {
-            background-color: #e8ddff; /* lighter pastel purple */
+            background-color: #e8ddff;
             color: #ffffff;
             text-align: center;
             padding: 1rem 0;
             font-size: 1.1rem;
-            margin-top: 3rem; /* moved down from grid */
+            margin-top: 3rem;
         }
 
-        /* Slide-in cart panel */
         .cart-panel {
             position: fixed;
             top: 0;
@@ -164,6 +175,32 @@
             color: #9083a1;
         }
 
+        .cart-item {
+            border-bottom: 1px solid #ccc;
+            padding: 8px 0;
+        }
+
+        .cart-item p {
+            margin: 0;
+            font-size: 1rem;
+            color: #5a4d6c;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 0.7rem;
+            margin-top: 1rem;
+            background-color: #a8d2fc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background-color: #6fb3ff;
+        }
     </style>
 </head>
 <body>
@@ -187,10 +224,40 @@
 
     <div id="cart-panel" class="cart-panel">
         <h3>Your Cart</h3>
-        <p>No items yet.</p>
+        <div id="cart-items">
+            <p>No items yet.</p>
+        </div>
+        <p id="cart-subtotal"></p>
+        <button class="checkout-btn" onclick="alert('Checkout page under maintenance!')">Checkout</button>
     </div>
 
     <script>
+        let cart = [];
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            cartItems.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>No items yet.</p>';
+                subtotalEl.innerHTML = '';
+                return;
+            }
+
+            let subtotal = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `<p>${item.name} x ${item.quantity} - $${itemTotal.toFixed(2)}</p>`;
+                cartItems.appendChild(div);
+            });
+
+            subtotalEl.innerHTML = `<strong>Subtotal: $${subtotal.toFixed(2)}</strong>`;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const cartButton = document.getElementById('cart-button');
             const cartPanel = document.getElementById('cart-panel');
@@ -198,11 +265,33 @@
             cartButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 cartPanel.classList.toggle('open');
+                updateCartDisplay();
             });
 
             document.addEventListener('click', (e) => {
                 if (!cartPanel.contains(e.target) && !cartButton.contains(e.target)) {
                     cartPanel.classList.remove('open');
+                }
+            });
+
+            // Event delegation for Add to Cart buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('add-to-cart-button') || e.target.closest('.add-to-cart-button')) {
+                    const btn = e.target.closest('.add-to-cart-button');
+                    const cookieId = btn.dataset.id;
+                    const cookieName = btn.dataset.name;
+                    const cookiePrice = parseFloat(btn.dataset.price);
+                    const quantity = parseInt(prompt('Enter quantity:', '1'));
+                    if (!isNaN(quantity) && quantity > 0) {
+                        const existing = cart.find(c => c.id === cookieId);
+                        if (existing) {
+                            existing.quantity += quantity;
+                        } else {
+                            cart.push({id: cookieId, name: cookieName, price: cookiePrice, quantity: quantity});
+                        }
+                        updateCartDisplay();
+                        alert(`${quantity} x ${cookieName} added to cart!`);
+                    }
                 }
             });
         });

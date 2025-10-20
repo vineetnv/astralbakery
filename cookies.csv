@@ -1,2 +1,5 @@
 id,name,image,price,is_listed
-1,vineet,images/image_12.jpg,364.5,True
+1,vineet,images/image_12.jpg,357.0,True
+2,ur mom,images/sunlight.jpeg,387.0,False
+3,me,images/Screenshot_2023-05-12_10.46.56_AM.png,43857.0,False
+4,ur sister,images/FECEF5BA-3F61-485E-B01C-159C8C7BDB23.jpeg,47,True

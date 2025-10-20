@@ -3,16 +3,71 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey123"  # Change this to a secure random string
+app.secret_key = "supersecretkey123" 
 COOKIES_FILE = 'cookies.csv'
 IMAGE_FOLDER = 'static/images'
+
+# ------------------------
+# Helper Functions
+# ------------------------
+def read_cookies():
+    cookies = []
+    try:
+        with open(COOKIES_FILE, newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                row['price'] = float(row['price'])
+                row['is_listed'] = row['is_listed'] == 'True'
+                cookies.append(row)
+    except FileNotFoundError:
+        pass
+    return cookies
+
+def write_cookies(cookies):
+    with open(COOKIES_FILE, 'w', newline='', encoding='utf-8') as f:
+        fieldnames = ['id', 'name', 'image', 'price', 'is_listed']
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for cookie in cookies:
+            writer.writerow(cookie)
 
 # ------------------------
 # Homepage
 # ------------------------
 @app.route('/')
 def home():
-    return render_template('index.html')
+    cookies = read_cookies()
+    current_cookies = [c for c in cookies if c['is_listed']]
+    past_cookies = [c for c in cookies if not c['is_listed']]
+    cart = session.get('cart', {})  # get cart from session
+    return render_template('index.html', current_cookies=current_cookies, past_cookies=past_cookies, cart=cart)
+
+# ------------------------
+# Add to Cart
+# ------------------------
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    cookie_id = request.form.get('cookie_id')
+    quantity = int(request.form.get('quantity', 1))
+
+    cookies = read_cookies()
+    cookie = next((c for c in cookies if str(c['id']) == str(cookie_id)), None)
+    if not cookie:
+        flash("Cookie not found.")
+        return redirect(url_for('home'))
+
+    cart = session.get('cart', {})
+    if cookie_id in cart:
+        cart[cookie_id]['quantity'] += quantity
+    else:
+        cart[cookie_id] = {
+            'name': cookie['name'],
+            'price': cookie['price'],
+            'quantity': quantity
+        }
+    session['cart'] = cart
+    flash(f"Added {quantity} x {cookie['name']} to cart.")
+    return redirect(url_for('home'))
 
 # ------------------------
 # Menu Page
@@ -39,7 +94,6 @@ def order_page():
         quantity = request.form['quantity']
         pickup_time = request.form['pickup_time']
 
-        # Save order to CSV
         with open('orders.csv', mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([name, cookie, quantity, pickup_time])
@@ -57,7 +111,6 @@ def login_page():
         username = request.form['username']
         password = request.form['password']
 
-        # Replace with your friend's credentials
         if username == 'bakeryowner' and password == 'cookie123':
             session['logged_in'] = True
             return redirect(url_for('dashboard'))
@@ -67,7 +120,7 @@ def login_page():
     return render_template('login.html')
 
 # ------------------------
-# Dashboard (Bakery Owner Homepage)
+# Dashboard
 # ------------------------
 @app.route('/dashboard')
 def dashboard():
@@ -103,7 +156,7 @@ def orders_page():
     return render_template('orders.html', orders=orders)
 
 # ------------------------
-# Fulfill Order (Remove from CSV)
+# Fulfill Order
 # ------------------------
 @app.route('/fulfill/<int:order_index>', methods=['POST'])
 def fulfill_order(order_index):
@@ -118,7 +171,6 @@ def fulfill_order(order_index):
     except FileNotFoundError:
         orders = []
 
-    # Remove the order at the given index
     if 0 <= order_index < len(orders):
         orders.pop(order_index)
         with open('orders.csv', 'w', newline='') as file:
@@ -127,25 +179,9 @@ def fulfill_order(order_index):
 
     return redirect(url_for('orders_page'))
 
-# Helper functions
-def read_cookies():
-    cookies = []
-    with open(COOKIES_FILE, newline='', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            row['price'] = float(row['price'])
-            row['is_listed'] = row['is_listed'] == 'True'
-            cookies.append(row)
-    return cookies
-
-def write_cookies(cookies):
-    with open(COOKIES_FILE, 'w', newline='', encoding='utf-8') as f:
-        fieldnames = ['id', 'name', 'image', 'price', 'is_listed']
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for cookie in cookies:
-            writer.writerow(cookie)
-
+# ------------------------
+# Cookie Management Pages
+# ------------------------
 @app.route('/manage-cookies')
 def manage_cookies():
     if not session.get('logged_in'):
