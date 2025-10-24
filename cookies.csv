@@ -1,3 +1,3 @@
 id,name,image,price,description,is_listed
 1,krishnam,images/image_12.jpg,83.4,hello,True
-2,ProEgg38,images/image_8.jpg,7687.0,hellome,True
+2,ProEgg38,images/image_8.jpg,7687.0,hellome,False
