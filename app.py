@@ -18,6 +18,9 @@ def read_cookies():
             for row in reader:
                 row['price'] = float(row['price'])
                 row['is_listed'] = row['is_listed'] == 'True'
+                # ensure description exists for backward compatibility
+                if 'description' not in row:
+                    row['description'] = ''
                 cookies.append(row)
     except FileNotFoundError:
         pass
@@ -25,10 +28,12 @@ def read_cookies():
 
 def write_cookies(cookies):
     with open(COOKIES_FILE, 'w', newline='', encoding='utf-8') as f:
-        fieldnames = ['id', 'name', 'image', 'price', 'is_listed']
+        fieldnames = ['id', 'name', 'image', 'price', 'description', 'is_listed']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for cookie in cookies:
+            if 'description' not in cookie:
+                cookie['description'] = ''
             writer.writerow(cookie)
 
 # ------------------------
@@ -66,7 +71,7 @@ def add_to_cart():
             'quantity': quantity
         }
     session['cart'] = cart
-    flash(f"Added {quantity} x {cookie['name']} to cart.")
+    flash(f"🧁 Added {quantity} x {cookie['name']} to your cart!")
     return redirect(url_for('home'))
 
 # ------------------------
@@ -214,6 +219,7 @@ def add_cookie():
     if request.method == 'POST':
         name = request.form['name']
         price = request.form['price']
+        description = request.form.get('description', '')
         image = request.files['image']
 
         if image.filename:
@@ -230,6 +236,7 @@ def add_cookie():
             'name': name,
             'image': image_path,
             'price': price,
+            'description': description,
             'is_listed': True
         })
         write_cookies(cookies)
@@ -243,6 +250,7 @@ def update_cookie(id):
         if int(cookie['id']) == id:
             cookie['name'] = request.form['name']
             cookie['price'] = request.form['price']
+            cookie['description'] = request.form.get('description', cookie.get('description', ''))
             image = request.files['image']
             if image and image.filename:
                 filename = secure_filename(image.filename)
