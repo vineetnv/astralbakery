@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey123" 
+app.secret_key = "supersecretkey123"
 COOKIES_FILE = 'cookies.csv'
 IMAGE_FOLDER = 'static/images'
 
@@ -18,9 +18,7 @@ def read_cookies():
             for row in reader:
                 row['price'] = float(row['price'])
                 row['is_listed'] = row['is_listed'] == 'True'
-                # ensure description exists for backward compatibility
-                if 'description' not in row:
-                    row['description'] = ''
+                row['description'] = row.get('description', '')
                 cookies.append(row)
     except FileNotFoundError:
         pass
@@ -37,6 +35,14 @@ def write_cookies(cookies):
             writer.writerow(cookie)
 
 # ------------------------
+# Initialize Cart for Session
+# ------------------------
+@app.before_request
+def initialize_cart():
+    if 'cart' not in session:
+        session['cart'] = {}
+
+# ------------------------
 # Homepage
 # ------------------------
 @app.route('/')
@@ -44,8 +50,19 @@ def home():
     cookies = read_cookies()
     current_cookies = [c for c in cookies if c['is_listed']]
     past_cookies = [c for c in cookies if not c['is_listed']]
-    cart = session.get('cart', {})  # get cart from session
+    cart = session.get('cart', {})
     return render_template('index.html', current_cookies=current_cookies, past_cookies=past_cookies, cart=cart)
+
+# ------------------------
+# Menu Page
+# ------------------------
+@app.route('/menu')
+def menu_page():
+    cookies = read_cookies()
+    current_cookies = [c for c in cookies if c['is_listed']]
+    past_cookies = [c for c in cookies if not c['is_listed']]
+    cart = session.get('cart', {})
+    return render_template('menu.html', current_cookies=current_cookies, past_cookies=past_cookies, cart=cart)
 
 # ------------------------
 # Add to Cart
@@ -59,7 +76,7 @@ def add_to_cart():
     cookie = next((c for c in cookies if str(c['id']) == str(cookie_id)), None)
     if not cookie:
         flash("Cookie not found.")
-        return redirect(url_for('home'))
+        return redirect(request.referrer or url_for('home'))
 
     cart = session.get('cart', {})
     if cookie_id in cart:
@@ -72,14 +89,16 @@ def add_to_cart():
         }
     session['cart'] = cart
     flash(f"🧁 Added {quantity} x {cookie['name']} to your cart!")
-    return redirect(url_for('home'))
+    return redirect(request.referrer or url_for('home'))
 
 # ------------------------
-# Menu Page
+# Clear Cart
 # ------------------------
-@app.route('/menu')
-def menu_page():
-    return render_template('menu.html')
+@app.route('/clear_cart', methods=['POST'])
+def clear_cart():
+    session['cart'] = {}
+    flash("🛒 Cart cleared!")
+    return redirect(request.referrer or url_for('home'))
 
 # ------------------------
 # About Page
@@ -120,7 +139,8 @@ def login_page():
             session['logged_in'] = True
             return redirect(url_for('dashboard'))
         else:
-            return "Incorrect username or password. Try again."
+            flash("Incorrect username or password. Try again.")
+            return redirect(url_for('login_page'))
 
     return render_template('login.html')
 
@@ -143,7 +163,7 @@ def logout_page():
     return redirect(url_for('home'))
 
 # ------------------------
-# Private Orders Page
+# Orders Pages & Management
 # ------------------------
 @app.route('/orders')
 def orders_page():
@@ -160,9 +180,6 @@ def orders_page():
 
     return render_template('orders.html', orders=orders)
 
-# ------------------------
-# Fulfill Order
-# ------------------------
 @app.route('/fulfill/<int:order_index>', methods=['POST'])
 def fulfill_order(order_index):
     if not session.get('logged_in'):
@@ -185,7 +202,7 @@ def fulfill_order(order_index):
     return redirect(url_for('orders_page'))
 
 # ------------------------
-# Cookie Management Pages
+# Cookie Management
 # ------------------------
 @app.route('/manage-cookies')
 def manage_cookies():
@@ -218,11 +235,11 @@ def remove_cookie(id):
 def add_cookie():
     if request.method == 'POST':
         name = request.form['name']
-        price = request.form['price']
+        price = float(request.form['price'])
         description = request.form.get('description', '')
         image = request.files['image']
 
-        if image.filename:
+        if image and image.filename:
             filename = secure_filename(image.filename)
             image.save(os.path.join(IMAGE_FOLDER, filename))
             image_path = f'images/{filename}'
@@ -240,6 +257,7 @@ def add_cookie():
             'is_listed': True
         })
         write_cookies(cookies)
+        flash(f"Cookie '{name}' added successfully!")
         return redirect(url_for('manage_cookies'))
     return render_template('add_cookie.html')
 
@@ -249,7 +267,7 @@ def update_cookie(id):
     for cookie in cookies:
         if int(cookie['id']) == id:
             cookie['name'] = request.form['name']
-            cookie['price'] = request.form['price']
+            cookie['price'] = float(request.form['price'])
             cookie['description'] = request.form.get('description', cookie.get('description', ''))
             image = request.files['image']
             if image and image.filename:
@@ -258,6 +276,7 @@ def update_cookie(id):
                 cookie['image'] = f'images/{filename}'
             break
     write_cookies(cookies)
+    flash(f"Cookie '{cookie['name']}' updated successfully!")
     return redirect(url_for('manage_cookies'))
 
 # ------------------------

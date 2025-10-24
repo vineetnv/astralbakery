@@ -6,23 +6,49 @@
 <main>
     <h2 style="text-align:center; margin-top:2rem;">🍪 Astral Bakery Menu</h2>
 
-    <div class="cookie" style="margin: 1.5rem auto; background: #ffe0b2; width: 50%; border-radius: 10px; padding: 1rem;">
-        <h3>Chocolate Chip Cookies</h3>
-        <p>Classic, chewy, and full of chocolate chunks.</p>
-    </div>
+    <!-- Current Flavors -->
+    <h3 style="text-align:center; color:#4caf50; margin-top:2rem;">Current Flavors</h3>
+    {% if current_cookies %}
+        {% for cookie in current_cookies %}
+        <div class="cookie" style="margin: 1.5rem auto; background: #ffe0b2; width: 50%; border-radius: 10px; padding: 1rem;">
+            <h3>{{ cookie.name }}</h3>
+            <p>{{ cookie.description }}</p>
+            <p><strong>Price: ${{ '%.2f'|format(cookie.price) }}</strong></p>
 
-    <div class="cookie" style="margin: 1.5rem auto; background: #ffe0b2; width: 50%; border-radius: 10px; padding: 1rem;">
-        <h3>Oatmeal Raisin</h3>
-        <p>Perfectly spiced, soft, and comforting.</p>
-    </div>
+            <!-- Add to Cart Form -->
+            <form action="{{ url_for('add_to_cart') }}" method="post" style="margin-top: 0.5rem;">
+                <input type="hidden" name="cookie_id" value="{{ cookie.id }}">
+                <label for="quantity_{{ cookie.id }}">Qty:</label>
+                <input type="number" name="quantity" id="quantity_{{ cookie.id }}" value="1" min="1" style="width:50px;">
+                <input type="submit" value="Add to Cart" style="padding:5px 10px; background-color:#a8d2fc; border:none; color:white; border-radius:5px; cursor:pointer;">
+            </form>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center;">No current flavors available.</p>
+    {% endif %}
 
-    <div class="cookie" style="margin: 1.5rem auto; background: #ffe0b2; width: 50%; border-radius: 10px; padding: 1rem;">
-        <h3>Peanut Butter</h3>
-        <p>Rich and nutty with the perfect crumbly bite.</p>
-    </div>
+    <!-- Past Flavors -->
+    <h3 style="text-align:center; color:#f44336; margin-top:3rem;">Past Flavors</h3>
+    {% if past_cookies %}
+        {% for cookie in past_cookies %}
+        <div class="cookie" style="margin: 1.5rem auto; background: #f8d7da; width: 50%; border-radius: 10px; padding: 1rem;">
+            <h3>{{ cookie.name }}</h3>
+            <p>{{ cookie.description }}</p>
+            <p><strong>Price: ${{ '%.2f'|format(cookie.price) }}</strong></p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center;">No past flavors.</p>
+    {% endif %}
 
     <div style="text-align:center; margin-bottom:2rem;">
         <a href="/" style="color:#ff7043; text-decoration:none;">← Back to Home</a>
     </div>
 </main>
+
+<style>
+.cookie input[type="number"] { padding:5px; border-radius:5px; border:1px solid #ccc; }
+.cookie input[type="submit"]:hover { background-color:#6fb3ff; }
+</style>
 {% endblock %}

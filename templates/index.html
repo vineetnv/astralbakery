@@ -2,62 +2,56 @@
 {% block title %}Home - Astral Bakery{% endblock %}
 
 {% block content %}
-    <!-- 🔔 Flash messages -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
+<!-- 🔔 Flash messages -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<!-- 🖼️ Banner image -->
+<img src="{{ url_for('static', filename='images/itworked.jpg') }}" alt="Astral Bakery Banner" class="banner">
+
+<!-- 🧁 Section title -->
+<h2 class="section-title">Current Selections</h2>
+
+<!-- 🏆 Grid of current cookies -->
+<div class="grid">
+    {% if current_cookies %}
+        {% for c in current_cookies %}
+            <div class="grid-item">
+                <img src="{{ url_for('static', filename=c.image) }}" alt="{{ c.name }}">
+                <p>{{ c.name }} - ${{ '%.2f'|format(c.price|float) }}</p>
+
+                <!-- Add to Cart Form -->
+                <form action="{{ url_for('add_to_cart') }}" method="post">
+                    <input type="hidden" name="cookie_id" value="{{ c.id }}">
+                    <input type="number" name="quantity" value="1" min="1" style="width:50px; margin-top:5px;">
+                    <input type="submit" value="Add to Cart" style="padding:5px 10px; background-color:#a8d2fc; border:none; color:white; border-radius:5px; cursor:pointer; margin-top:5px;">
+                </form>
             </div>
-        {% endif %}
-    {% endwith %}
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center;">No cookies are currently listed. Check back soon!</p>
+    {% endif %}
+</div>
 
-    <!-- 🖼️ Banner image -->
-    <img src="{{ url_for('static', filename='images/itworked.jpg') }}" alt="Astral Bakery Banner" class="banner">
-
-    <!-- 🧁 Section title -->
-    <h2 class="section-title">Current Selections</h2>
-
-    <!-- 🏆 Grid of current cookies -->
-    <div class="grid">
-        {% if current_cookies %}
-            {% for c in current_cookies %}
-                <div class="grid-item">
-                    <img src="{{ url_for('static', filename=c.image) }}" alt="{{ c.name }}">
-                    <p>{{ c.name }} - ${{ '%.2f'|format(c.price|float) }}</p>
-                    <button class="add-to-cart-button"
-                            data-id="{{ c.id }}"
-                            data-name="{{ c.name }}"
-                            data-price="{{ c.price|float }}">
-                        Add to Cart
-                    </button>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p style="text-align:center;">No cookies are currently listed. Check back soon!</p>
-        {% endif %}
-    </div>
-
-    <!-- 🍪 Past Flavors Section -->
-    <h2 class="section-title" style="margin-top: 60px;">Past Flavors</h2>
-
-    <div class="grid">
-        {% if past_cookies %}
-            {% for c in past_cookies %}
-                <div class="grid-item" style="opacity:0.7;">
-                    <img src="{{ url_for('static', filename=c.image) }}" alt="{{ c.name }}">
-                    <p>{{ c.name }} - ${{ '%.2f'|format(c.price|float) }}</p>
-                    <button class="add-to-cart-button"
-                            data-id="{{ c.id }}"
-                            data-name="{{ c.name }}"
-                            data-price="{{ c.price|float }}">
-                        Add to Cart
-                    </button>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p style="text-align:center;">No past flavors available right now!</p>
-        {% endif %}
-    </div>
+<!-- 🍪 Past Flavors Section -->
+<h2 class="section-title" style="margin-top: 60px;">Past Flavors</h2>
+<div class="grid">
+    {% if past_cookies %}
+        {% for c in past_cookies %}
+            <div class="grid-item" style="opacity:0.7;">
+                <img src="{{ url_for('static', filename=c.image) }}" alt="{{ c.name }}">
+                <p>{{ c.name }} - ${{ '%.2f'|format(c.price|float) }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center;">No past flavors available right now!</p>
+    {% endif %}
+</div>
 {% endblock %}

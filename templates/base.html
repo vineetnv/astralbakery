@@ -4,246 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Astral Bakery{% endblock %}</title>
-
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            font-family: 'Poppins', sans-serif;
-            background-color: #fdf0f5;
-            color: #a59ecb;
-            text-align: start;
-            min-height: 100vh;
-        }
-
-        main { flex: 1; }
-
-        header {
-            background-color: #e4d9f8;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-        }
-
-        h1 a {
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-        nav {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .button {
-            background: linear-gradient(135deg, #a8d2fc, #6fb3ff);
-            color: #ffffff;
-            font-weight: 700;
-            border: none;
-            padding: 0.9rem 1.6rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            transition: background 0.3s ease;
-        }
-
-        .button:hover {
-            background: linear-gradient(135deg, #8fc7ff, #4fa3ff);
-        }
-
-        .banner {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: bold;
-            margin-top: 2rem;
-            text-decoration: underline;
-            color: #f0a7c0;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
-            justify-items: center;
-        }
-
-        .grid-item {
-            position: relative;
-            text-align: center;
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            background: linear-gradient(135deg, #d5c2f0, #ffe0f0);
-        }
-
-        .grid-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-        }
-
-        .grid-item img {
-            width: 250px;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
-            background-color: transparent;
-        }
-
-        .grid-item p {
-            margin-top: 0.5rem;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #5a4d6c;
-        }
-
-        .grid-item button {
-            margin-top: 8px;
-            padding: 0.5rem 1rem;
-            background-color: #a8d2fc;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .grid-item button:hover {
-            background-color: #6fb3ff;
-        }
-
-        .bottom-banner {
-            background-color: #e8ddff;
-            color: #ffffff;
-            text-align: center;
-            padding: 1rem 0;
-            font-size: 1.1rem;
-            margin-top: 3rem;
-        }
-
-        .cart-panel {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 300px;
-            height: 100%;
-            background-color: #fdf0f5;
-            border-left: 2px solid #e4d9f8;
-            box-shadow: -2px 0 6px rgba(0,0,0,0.2);
-            transition: right 0.3s ease;
-            padding: 1rem;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .cart-panel.open { right: 0; }
-
-        .cart-item {
-            border-bottom: 1px solid #ccc;
-            padding: 8px 0;
-        }
-
-        .cart-item p {
-            margin: 0;
-            font-size: 1rem;
-            color: #5a4d6c;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 0.7rem;
-            margin-top: 1rem;
-            background-color: #a8d2fc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .checkout-btn:hover { background-color: #6fb3ff; }
-
-        /* ==== MODAL STYLES ==== */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .modal {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 350px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .modal h3 {
-            margin-top: 0;
-            color: #5a4d6c;
-        }
-
-        .modal input {
-            padding: 8px;
-            width: 80%;
-            margin-top: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-        }
-
-        .modal button {
-            margin-top: 15px;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .confirm-btn {
-            background-color: #a8d2fc;
-            color: white;
-        }
-
-        .cancel-btn {
-            background-color: #e8ddff;
-            color: #5a4d6c;
-        }
+        html, body { height:100%; margin:0; padding:0; }
+        body { display:flex; flex-direction:column; font-family:'Poppins',sans-serif; background-color:#fdf0f5; color:#a59ecb; min-height:100vh; }
+        main { flex:1; }
+        header { background-color:#e4d9f8; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+        h1 { margin:0; font-size:2.5rem; font-weight:700; text-shadow:1px 1px 5px rgba(0,0,0,0.2); }
+        h1 a { color:#fff; text-decoration:none; }
+        nav { display:flex; gap:1rem; }
+        .button { background:linear-gradient(135deg,#a8d2fc,#6fb3ff); color:#fff; font-weight:700; border:none; padding:0.9rem 1.6rem; border-radius:8px; cursor:pointer; font-size:1.2rem; text-decoration:none; display:flex; align-items:center; gap:0.4rem; transition:background 0.3s ease; }
+        .button:hover { background:linear-gradient(135deg,#8fc7ff,#4fa3ff); }
+        .banner { width:100%; height:250px; object-fit:cover; display:block; }
+        .section-title { text-align:center; font-size:2rem; font-weight:bold; margin-top:2rem; text-decoration:underline; color:#f0a7c0; }
+        .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; margin-top:2rem; justify-items:center; }
+        .grid-item { position:relative; text-align:center; border-radius:12px; padding:1rem; box-shadow:0 2px 6px rgba(0,0,0,0.08); transition:transform 0.2s ease, box-shadow 0.2s ease; background:linear-gradient(135deg,#d5c2f0,#ffe0f0); }
+        .grid-item:hover { transform:translateY(-4px); box-shadow:0 4px 10px rgba(0,0,0,0.12); }
+        .grid-item img { width:250px; height:250px; object-fit:cover; border-radius:10px; background-color:transparent; }
+        .grid-item p { margin-top:0.5rem; font-weight:bold; font-size:1.1rem; color:#5a4d6c; }
+        .grid-item button { margin-top:8px; padding:0.5rem 1rem; background-color:#a8d2fc; color:#fff; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
+        .grid-item button:hover { background-color:#6fb3ff; }
+        .bottom-banner { background-color:#e8ddff; color:#ffffff; text-align:center; padding:1rem 0; font-size:1.1rem; margin-top:3rem; }
+        .cart-panel { position:fixed; top:0; right:-100%; width:300px; height:100%; background-color:#fdf0f5; border-left:2px solid #e4d9f8; box-shadow:-2px 0 6px rgba(0,0,0,0.2); transition:right 0.3s ease; padding:1rem; overflow-y:auto; z-index:1000; }
+        .cart-panel.open { right:0; }
+        .cart-item { border-bottom:1px solid #ccc; padding:8px 0; }
+        .cart-item p { margin:0; font-size:1rem; color:#5a4d6c; }
+        .checkout-btn { width:100%; padding:0.7rem; margin-top:1rem; background-color:#a8d2fc; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer; }
+        .checkout-btn:hover { background-color:#6fb3ff; }
     </style>
 </head>
 <body>
@@ -253,124 +39,56 @@
             <a href="/menu" class="button">View Menu</a>
             <a href="/order" class="button">Place Order</a>
             <a href="/about" class="button">About</a>
-            <a href="#" id="cart-button" class="button"><span class="cart-icon">🛒</span> Cart</a>
+            <a href="#" id="cart-button" class="button">🛒 Cart</a>
         </nav>
     </header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+    <main>{% block content %}{% endblock %}</main>
 
     <div class="bottom-banner">
         Email: TheAstralBakery@gmail.com | Phone: 256-783-0672
     </div>
 
+    <!-- Cart Panel -->
     <div id="cart-panel" class="cart-panel">
         <h3>Your Cart</h3>
-        <div id="cart-items"><p>No items yet.</p></div>
-        <p id="cart-subtotal"></p>
+        <div id="cart-items">
+            {% if cart %}
+                {% set subtotal = 0 %}
+                {% for id, item in cart.items() %}
+                    <div class="cart-item">
+                        <p>{{ item.name }} x {{ item.quantity }} - ${{ '%.2f'|format(item.price * item.quantity) }}</p>
+                    </div>
+                    {% set subtotal = subtotal + (item.price * item.quantity) %}
+                {% endfor %}
+            {% else %}
+                <p>No items yet.</p>
+            {% endif %}
+        </div>
+        {% if cart %}
+            <p><strong>Subtotal: ${{ '%.2f'|format(subtotal) }}</strong></p>
+        {% endif %}
         <button class="checkout-btn" onclick="alert('Checkout page under maintenance!')">Checkout</button>
-    </div>
-
-    <!-- Quantity Modal -->
-    <div id="quantity-modal" class="modal-overlay">
-        <div class="modal">
-            <h3>Enter Quantity</h3>
-            <input type="number" id="quantity-input" min="1" value="1" />
-            <br>
-            <button class="confirm-btn" id="confirm-quantity">Add</button>
-            <button class="cancel-btn" id="cancel-quantity">Cancel</button>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div id="confirmation-modal" class="modal-overlay">
-        <div class="modal">
-            <h3 id="confirmation-text"></h3>
-            <button class="confirm-btn" id="close-confirmation">OK</button>
-        </div>
+        <form action="{{ url_for('clear_cart') }}" method="post" style="margin-top:10px;">
+            <input type="submit" value="Clear Cart" class="checkout-btn" style="background-color:#ff6b6b;">
+        </form>
     </div>
 
     <script>
-        let cart = [];
-        let currentItem = null;
-
-        function updateCartDisplay() {
-            const cartItems = document.getElementById('cart-items');
-            const subtotalEl = document.getElementById('cart-subtotal');
-            cartItems.innerHTML = '';
-
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<p>No items yet.</p>';
-                subtotalEl.innerHTML = '';
-                return;
-            }
-
-            let subtotal = 0;
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                const div = document.createElement('div');
-                div.className = 'cart-item';
-                div.innerHTML = `<p>${item.name} x ${item.quantity} - $${itemTotal.toFixed(2)}</p>`;
-                cartItems.appendChild(div);
-            });
-
-            subtotalEl.innerHTML = `<strong>Subtotal: $${subtotal.toFixed(2)}</strong>`;
-        }
-
+        // Toggle Cart Panel
         document.addEventListener('DOMContentLoaded', () => {
             const cartButton = document.getElementById('cart-button');
             const cartPanel = document.getElementById('cart-panel');
-            const quantityModal = document.getElementById('quantity-modal');
-            const confirmationModal = document.getElementById('confirmation-modal');
-            const confirmationText = document.getElementById('confirmation-text');
-            const quantityInput = document.getElementById('quantity-input');
 
-            cartButton.addEventListener('click', (e) => {
+            cartButton.addEventListener('click', e => {
                 e.preventDefault();
                 cartPanel.classList.toggle('open');
-                updateCartDisplay();
             });
 
-            document.addEventListener('click', (e) => {
+            document.addEventListener('click', e => {
                 if (!cartPanel.contains(e.target) && !cartButton.contains(e.target)) {
                     cartPanel.classList.remove('open');
                 }
-            });
-
-            // Add to Cart button handling
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('add-to-cart-button') || e.target.closest('.add-to-cart-button')) {
-                    const btn = e.target.closest('.add-to-cart-button');
-                    currentItem = {
-                        id: btn.dataset.id,
-                        name: btn.dataset.name,
-                        price: parseFloat(btn.dataset.price)
-                    };
-                    quantityModal.style.display = 'flex';
-                }
-            });
-
-            document.getElementById('confirm-quantity').addEventListener('click', () => {
-                const quantity = parseInt(quantityInput.value);
-                if (currentItem && !isNaN(quantity) && quantity > 0) {
-                    const existing = cart.find(c => c.id === currentItem.id);
-                    if (existing) existing.quantity += quantity;
-                    else cart.push({...currentItem, quantity});
-                    updateCartDisplay();
-                    quantityModal.style.display = 'none';
-                    confirmationText.textContent = `${quantity} × ${currentItem.name} added to cart!`;
-                    confirmationModal.style.display = 'flex';
-                }
-            });
-
-            document.getElementById('cancel-quantity').addEventListener('click', () => {
-                quantityModal.style.display = 'none';
-            });
-
-            document.getElementById('close-confirmation').addEventListener('click', () => {
-                confirmationModal.style.display = 'none';
             });
         });
     </script>
